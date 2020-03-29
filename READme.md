@@ -1,1 +1,1 @@
-"# ARCore with Android"
+# ARCore with Android
