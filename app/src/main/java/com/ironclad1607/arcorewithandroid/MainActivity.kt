@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private var isTracking: Boolean = false
     private var isHitting: Boolean = false
 
+    private var anchorNode: AnchorNode? = null
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,19 @@ class MainActivity : AppCompatActivity() {
         FAB.setOnClickListener {
             addObject(Uri.parse("model.sfb"))
         }
+
+        clearFAB.setOnClickListener {
+            removeObject(anchorNode)
+        }
         showFab(false)
+    }
+
+    private fun removeObject(anchorNode: AnchorNode?) {
+        if (anchorNode != null) {
+            arFragment.arSceneView.scene.removeChild(anchorNode)
+            anchorNode.anchor?.detach()
+            anchorNode.setParent(null)
+        }
     }
 
     private fun showFab(b: Boolean) {
@@ -128,7 +142,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addNodeToScene(fragment: ArFragment, anchor: Anchor, renderable: ModelRenderable) {
-        val anchorNode = AnchorNode(anchor)
+        anchorNode = AnchorNode(anchor)
         val transformableNode = TransformableNode(fragment.transformationSystem)
         transformableNode.renderable = renderable
         transformableNode.setParent(anchorNode)
